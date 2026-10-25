@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chứng Chỉ P12 - Dịch Vụ An Toàn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#FF6B00',
+                        success: '#00B42A',
+                        danger: '#F53F3F',
+                        dark: '#1D2129',
+                        light: '#F2F3F5',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-btn.active { border-bottom: 2px solid #165DFF; color: #165DFF; font-weight: 500; }
+        .modal { transition: opacity 0.3s ease; }
+        .modal.hidden { opacity: 0; pointer-events: none; }
+        .modal.show { opacity: 1; }
+    </style>
+</head>
+<body class="bg-gray-50 text-dark min-h-screen">
+    <!-- Thanh điều hướng -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#home" class="text-xl font-bold text-primary flex items-center">
+                <i class="fa fa-shield mr-2"></i> Chứng Chỉ P12
+            </a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#packages" class="text-gray-600 hover:text-primary">Gói Dịch Vụ</a>
+                <a href="#check" class="text-gray-600 hover:text-primary">Tra Cứu</a>
+                <span id="user-area">
+                    <button onclick="openModal('login-modal')" class="text-primary hover:text-primary/80">
+                        <i class="fa fa-user mr-1"></i> Đăng Nhập
+                    </button>
+                </span>
+            </div>
+            <button class="md:hidden text-xl" onclick="toggleMobileMenu()">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        <!-- Menu di động -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t px-4 pb-4">
+            <a href="#packages" class="block py-2 text-gray-600">Gói Dịch Vụ</a>
+            <a href="#check" class="block py-2 text-gray-600">Tra Cứu</a>
+            <a href="#" onclick="openModal('login-modal')" class="block py-2 text-primary">Đăng Nhập</a>
+        </div>
+    </nav>
+
+    <!-- ============= TRANG CHỦ / GÓI DỊCH VỤ ============= -->
+    <section id="home" class="py-8 px-4"></section>
+    <section id="packages" class="py-12 px-4">
+        <div class="container mx-auto">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-2">Gói Dịch Vụ Chứng Chỉ P12</h2>
+                <p class="text-gray-500">Giá Ưu Đãi Tốt Nhất Thị Trường</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <!-- Gói Cơ Bản -->
+                <div class="bg-white rounded-2xl shadow p-6 hover:shadow-md transition">
+                    <h3 class="text-xl font-semibold mb-2">Gói Cơ Bản</h3>
+                    <p class="text-sm text-gray-500 mb-4">Dành cho người dùng cá nhân</p>
+                    <p class="text-4xl font-bold text-primary mb-6">39.000 <span class="text-lg font-normal text-gray-500">VNĐ/năm</span></p>
+                    <ul class="space-y-2 mb-6 text-sm">
+                        <li class="flex items-start"><i class="fa fa-check text-success mt-1 mr-2"></i> Chứng chỉ P12</li>
+                        <li class="flex items-start"><i class="fa fa-check text-success mt-1 mr-2"></i> Sử dụng 365 ngày</li>
+                        <li class="flex items-start text-gray-400"><i class="fa fa-times mt-1 mr-2"></i> App Group</li>
+                    </ul>
+                    <button onclick="selectPackage('basic', '39.000', 'Gói Cơ Bản')" class="w-full py-2 rounded-lg border border-primary text-primary hover:bg-primary hover:text-white">
+                        Chọn Mua
+                    </button>
+                </div>
+                <!-- Gói Cao Cấp -->
+                <div class="bg-white rounded-2xl shadow p-6 hover:shadow-md transition border-2 border-primary relative">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-medium px-3 py-1 rounded-full">NỔI BẬT</div>
+                    <h3 class="text-xl font-semibold mb-2">Gói Cao Cấp</h3>
+                    <p class="text-sm text-gray-500 mb-4">Đầy đủ chức năng</p>
+                    <p class="text-4xl font-bold text-primary mb-6">59.000 <span class="text-lg font-normal text-gray-500">VNĐ/năm</span></p>
+                    <ul class="space-y-2 mb-6 text-sm">
+                        <li class="flex items-start"><i class="fa fa-bolt text-yellow-500 mt-1 mr-2"></i> Duyệt ngay lập tức</li>
+                        <li class="flex items-start"><i class="fa fa-check text-success mt-1 mr-2"></i> App Group, Thông báo đẩy, VPN</li>
+                        <li class="flex items-start"><i class="fa fa-shield text-primary mt-1 mr-2"></i> Bảo hành 30 ngày miễn phí</li>
+                        <li class="flex items-start"><i class="fa fa-unlock-alt text-secondary mt-1 mr-2"></i> Mở khóa Blacklist</li>
+                    </ul>
+                    <button onclick="selectPackage('premium', '59.000', 'Gói Cao Cấp')" class="w-full py-2 rounded-lg bg-primary text-white hover:bg-primary/90">
+                        Mua Ngay
+                    </button>
+                </div>
+                <!-- Gói Vĩnh Viễn -->
+                <div class="bg-white rounded-2xl shadow p-6 hover:shadow-md transition">
+                    <h3 class="text-xl font-semibold mb-2">Gói Vĩnh Viễn</h3>
+                    <p class="text-sm text-gray-500 mb-4">Sử dụng trọn đời</p>
+                    <p class="text-4xl font-bold text-secondary mb-6">149.000 <span class="text-lg font-normal text-gray-500">VNĐ/trọn đời</span></p>
+                    <ul class="space-y-2 mb-6 text-sm">
+                        <li class="flex items-start"><i class="fa fa-check text-success mt-1 mr-2"></i> Tất cả quyền lợi cao cấp</li>
+                        <li class="flex items-start"><i class="fa fa-clock-o text-success mt-1 mr-2"></i> Sử dụng vĩnh viễn</li>
+                        <li class="flex items-start"><i class="fa fa-headphones text-primary mt-1 mr-2"></i> Hỗ trợ ưu tiên 24/7</li>
+                    </ul>
+                    <button onclick="selectPackage('lifetime', '149.000', 'Gói Vĩnh Viễn')" class="w-full py-2 rounded-lg border border-secondary text-secondary hover:bg-secondary hover:text-white">
+                        Chọn Mua
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============= TRA CỨU ĐƠN HÀNG ============= -->
+    <section id="check" class="py-12 px-4 bg-white">
+        <div class="container mx-auto max-w-lg">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold mb-2">Tra Cứu Đơn Hàng</h2>
+                <p class="text-gray-500">Nhập UDID hoặc Mã đơn hàng để kiểm tra</p>
+            </div>
+            <div class="bg-light rounded-2xl p-6 shadow-sm">
+                <input type="text" id="search-udid" placeholder="Nhập UDID hoặc mã đơn hàng..." 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-primary/50">
+                <button onclick="checkOrder()" class="w-full py-3 bg-primary text-white rounded-lg hover:bg-primary/90 mb-4">
+                    <i class="fa fa-search mr-2"></i> Tra Cứu
+                </button>
+                <button onclick="alert('Hướng dẫn:\\n1. Mở trang: udid.apple.com\\n2. Kết nối thiết bị\\n3. Sao chép UDID và dán vào ô trên!')" 
+                    class="w-full py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100">
+                    <i class="fa fa-download mr-2"></i> Lấy UDID của tôi
+                </button>
+                
+                <!-- Kết quả -->
+                <div id="search-result" class="hidden mt-6">
+                    <div class="p-4 rounded-lg" id="result-content"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============= TRANG TÀI KHOẢN ============= -->
+    <section id="account" class="py-12 px-4 hidden">
+        <div class="container mx-auto max-w-2xl">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl font-bold">Tài Khoản Của Tôi</h2>
+                <button onclick="logout()" class="text-danger hover:text-danger/80">
+                    <i class="fa fa-sign-out mr-1"></i> Đăng Xuất
+                </button>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow p-6 mb-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary text-2xl mr-4">
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <div>
+                        <h3 id="acc-name" class="text-lg font-semibold">Khách Hàng</h3>
+                        <p id="acc-udid" class="text-sm text-gray-500">UDID: —</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-lg font-semibold mb-4">📦 Lịch Sử Đơn Hàng</h3>
+            <div id="order-history" class="space-y-3">
+                <p class="text-gray-500 text-center py-8">Chưa có đơn hàng nào</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============= MODAL: ĐĂNG NHẬP / ĐĂNG KÝ ============= -->
+    <div id="login-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold">Tài Khoản</h2>
+                <button onclick="closeModal('login-modal')" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+            </div>
+
+            <!-- Tab Đăng nhập / Đăng ký -->
+            <div class="flex border-b mb-6">
+                <button class="tab-btn active flex-1 py-2 text-center" onclick="switchTab('login')">Đăng Nhập</button>
+                <button class="tab-btn flex-1 py-2 text-center text-gray-500" onclick="switchTab('register')">Đăng Ký</button>
+            </div>
+
+            <!-- Form Đăng Nhập -->
+            <div id="tab-login" class="tab-content active">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">UDID / Email</label>
+                        <input type="text" id="login-udid" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Mật Khẩu</label>
+                        <input type="password" id="login-pass" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <button onclick="login()" class="w-full py-2 bg-primary text-white rounded-lg hover:bg-primary/90">
+                        Đăng Nhập
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form Đăng Ký -->
+            <div id="tab-register" class="tab-content">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tên của bạn</label>
+                        <input type="text" id="reg-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">UDID thiết bị</label>
+                        <input type="text" id="reg-udid" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="reg-email" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Mật Khẩu</label>
+                        <input type="password" id="reg-pass" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <button onclick="register()" class="w-full py-2 bg-success text-white rounded-lg hover:bg-success/90">
+                        Tạo Tài Khoản
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============= MODAL: THANH TOÁN ============= -->
+    <div id="checkout-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold">Thanh Toán Đơn Hàng</h2>
+                <button onclick="closeModal('checkout-modal')" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+            </div>
+
+            <!-- Thông tin đơn hàng -->
+            <div class="bg-light rounded-lg p-4 mb-6">
+                <p class="text-sm text-gray-500">Gói dịch vụ</p>
+                <p id="checkout-package" class="text-lg font-semibold">Gói Cao Cấp</p>
+                <div class="flex justify-between items-center mt-3 pt-3 border-t">
+                    <span class="text-gray-500">Thành tiền</span>
+                    <span id="checkout-price" class="text-xl font-bold text-primary">59.000 VNĐ</span>
+                </div>
+            </div>
+
+            <!-- Thông tin UDID -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">UDID thiết bị của bạn</label>
+                <input type="text" id="checkout-udid" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Nhập UDID của bạn">
+            </div>
+
+            <!-- Phương thức thanh toán -->
+            <div class="mb-6">
+                <p class="text-sm font-medium text-gray-700 mb-2">Chọn phương thức thanh toán</p>
+                <div class="space-y-2">
+                    <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-light">
+                        <input type="radio" name="payment" value="momo" class="mr-3" checked>
+                        <span class="text-pink-600 font-medium">🟣 MoMo</span>
+                    </label>
+                    <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-light">
+                        <input type="radio" name="payment" value="zalopay" class="mr-3">
+                        <span class="text-green-600 font-medium">🟢 ZaloPay</span>
+                    </label>
+                    <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-light">
+                        <input type="radio" name="payment" value="bank" class="mr-3">
+                        <span class="text-blue-600 font-medium">🏦 Ngân Hàng</span>
+                    </label>
+                </div>
+            </div>
+
+            <button onclick="processPayment()" class="w-full py-3 bg-success text-white rounded-lg font-medium hover:bg-success/90">
+                <i class="fa fa-credit-card mr-2"></i> Xác Nhận Thanh Toán
+            </button>
+            <p class="text-xs text-gray-400 text-center mt-3">Bằng cách nhấn nút trên, bạn đồng ý với điều khoản sử dụng</p>
+        </div>
+    </div>
+
+    <!-- ============= MODAL: THÔNG BÁO ============= -->
+    <div id="success-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div class="bg-white rounded-2xl p-8 w-full max-w-sm mx-4 text-center">
+            <div class="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center text-success text-3xl mx-auto mb-4">
+                <i class="fa fa-check"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Thành Công!</h3>
+            <p id="success-msg" class="text-gray-500 mb-6">Đơn hàng đã được tạo thành công!</p>
+            <button onclick="closeModal('success-modal')" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">
+                Đã Hiểu
+            </button>
+        </div>
+    </div>
+
+    <!-- Chân trang -->
+    <footer class="bg-dark text-white py-10 px-4 mt-12">
+        <div class="container mx-auto text-center">
+            <p class="text-lg font-semibold mb-2">Chứng Chỉ P12</p>
+            <p class="text-gray-400 text-sm mb-4">Dịch vụ cung cấp chứng chỉ an toàn và tin cậy</p>
+            <p class="text-gray-500 text-xs">© 2026 chungchip12.com — Mọi quyền được bảo lưu</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dữ liệu tạm thời — sẽ thay bằng CSDL thực tế
+        let currentUser = null;
+        let selectedPkg = null;
+        let orders = [];
+
+        // === HÀM HIỂN THỊ / ẨN MODAL ===
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            modal.classList.add('show');
+        }
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.add('hidden');
+            modal.classList.remove('show');
+        }
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // === CHỌN GÓI → MỞ THANH TOÁN ===
+        function selectPackage(id, price, name) {
+            selectedPkg = { id, price, name };
+            document.getElementById('checkout-package').textContent = name;
+            document.getElementById('checkout-price').textContent = price + ' VNĐ';
+            
+            // Nếu đã đăng nhập → điền sẵn UDID
+            if (currentUser) {
+                document.getElementById('checkout-udid').value = currentUser.udid;
+            }
+            openModal('checkout-modal');
+        }
+
+        // === XỬ LÝ ĐĂNG KÝ ===
+        function register() {
+            const name = document.getElementById('reg-name').value.trim();
+            const udid = document.getElementById('reg-udid').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pass = document.getElementById('reg-pass').value;
+
+            if (!name || !udid || !email || !pass) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+
+            // Lưu vào localStorage (tạm thời)
+            localStorage.setItem('p12_user', JSON.stringify({ name, udid, email }));
+            currentUser = { name, udid, email };
+            
+            closeModal('login-modal');
+            updateUserUI();
+            showAccountPage();
+            alert('🎉 Tạo tài khoản thành công!');
+        }
+
+        // === XỬ LÝ ĐĂNG NHẬP ===
+        function login() {
+            const udid = document.getElementById('login-udid').value.trim();
+            const pass = document.getElementById('login-pass').value;
+
+            // Kiểm tra dữ liệu tạm
+            const saved = localStorage.getItem('p12_user');
+            if (saved) {
+                const user = JSON.parse(saved);
+                if (user.udid === udid || user.email === udid) {
+                    currentUser = user;
+                    closeModal('login-modal');
+                    updateUserUI();
+                    showAccountPage();
+                    return;
+                }
+            }
+            alert('Thông tin đăng nhập không đúng! Vui lòng Đăng ký trước.');
+        }
+
+        // === ĐĂNG XUẤT ===
+        function logout() {
+            currentUser = null;
+            document.getElementById('account').classList.add('hidden');
+            document.getElementById('packages').scrollIntoView({ behavior: 'smooth' });
+            updateUserUI();
+        }
+
+        // === CẬP NHẬT GIAO DIỆN USER ===
+        function updateUserUI() {
+            const area = document.getElementById('user-area');
+            if (currentUser) {
+                area.innerHTML = `
+                    <button onclick="showAccountPage()" class="text-primary hover:text-primary/80">
+                        <i class="fa fa-user-circle mr-1"></i> ${currentUser.name}
+                    </button>
+                `;
+            } else {
+                area.innerHTML = `
+                    <button onclick="openModal('login-modal')" class="text-primary hover:text-primary/80">
+                        <i class="fa fa-user mr-1"></i> Đăng Nhập
+                    </button>
+                `;
+            }
+        }
+
+        // === HIỂN THỊ TRANG TÀI KHOẢN ===
+        function showAccountPage() {
+            if (!currentUser) return;
+            document.getElementById('account').classList.remove('hidden');
+            document.getElementById('acc-name').textContent = currentUser.name;
+            document.getElementById('acc-udid').textContent = 'UDID: ' + currentUser.udid;
+            updateOrderHistory();
+            document.getElementById('account').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // === XỬ LÝ THANH TOÁN ===
+        function processPayment() {
+            const udid = document.getElementById('checkout-udid').value.trim();
+            if (!udid) {
+                alert('Vui lòng nhập UDID!');
+                return;
+            }
+            if (!currentUser) {
+                closeModal('checkout-modal');
+                openModal('login-modal');
+                alert('Vui lòng đăng nhập trước khi thanh toán!');
+                return;
+            }
+
+            // Tạo đơn hàng
+            const orderId = 'P12-' + Date.now().toString().slice(-8);
+            const newOrder = {
+                id: orderId,
+                package: selectedPkg.name,
+                price: selectedPkg.price,
+                udid: udid,
+                date: new Date().toLocaleDateString('vi-VN'),
+                status: 'Đang xử lý'
+            };
+            
+            orders.unshift(newOrder);
+            localStorage.setItem('p12_orders', JSON.stringify(orders));
+            
+            closeModal('checkout-modal');
+            document.getElementById('success-msg').textContent = 
+                `Đơn hàng ${orderId} đã được tạo!\nVui lòng thanh toán để được cấp chứng chỉ.`;
+            openModal('success-modal');
+            
+            updateOrderHistory();
+            showAccountPage();
+        }
+
+        // === CẬP NHẬT LỊCH SỬ ĐƠN HÀNG ===
+        function updateOrderHistory() {
+            const container = document.getElementById('order-history');
+            const savedOrders = JSON.parse(localStorage.getItem('p12_orders') || '[]');
+            orders = savedOrders;
+            
+            if (orders.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">Chưa có đơn hàng nào</p>';
+                return;
+            }
+
+            container.innerHTML = orders.map(o => `
+                <div class="bg-white border rounded-lg p-4 shadow-sm">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-mono text-sm text-primary">${o.id}</span>
+                        <span class="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">${o.status}</span>
+                    </div>
+                    <p class="font-medium">${o.package}</p>
+                    <p class="text-sm text-gray-500">UDID: ${o.udid}</p>
+                    <p class="text-sm text-gray-500">Ngày: ${o.date} • ${o.price} VNĐ</p>
+                </div>
+            `).join('');
+        }
+
+        // === TRA CỨU ĐƠN HÀNG ===
+        function checkOrder() {
+            const keyword = document.getElementById('search-udid').value.trim().toLowerCase();
+            const resultDiv = document.getElementById('search-result');
+            const content = document.getElementById('result-content');
+            
+            if (!keyword) {
+                alert('Vui lòng nhập UDID hoặc mã đơn hàng!');
+                return;
+            }
+
+            const savedOrders = JSON.parse(localStorage.getItem('p12_orders') || '[]');
+            const found = savedOrders.find(o => 
+                o.id.toLowerCase() === keyword || o.udid.toLowerCase() === keyword
+            );
+
+            resultDiv.classList.remove('hidden');
+            if (found) {
+                content.className = 'p-4 rounded-lg bg-green-50 border border-green-200';
+                content.innerHTML = `
+                    <div class="flex items-start">
+                        <i class="fa fa-check-circle text-green-500 text-xl mt-1 mr-3"></i>
+                        <div>
+                            <h4 class="font-semibold text-green-800">Tìm thấy đơn hàng</h4>
+                            <p class="text-sm text-green-600">Mã: ${found.id}</p>
+                            <p class="text-sm text-green-600">Gói: ${found.package}</p>
+                            <p class="text-sm text-green-600">Trạng thái: <strong>${found.status}</strong></p>
+                            <p class="text-sm text-green-600">Ngày tạo: ${found.date}</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                content.className = 'p-4 rounded-lg bg-red-50 border border-red-200';
+                content.innerHTML = `
+                    <div class="flex items-start">
+                        <i class="fa fa-exclamation-circle text-red-500 text-xl mt-1 mr-3"></i>
+                        <div>
+                            <h4 class="font-semibold text-red-800">Không tìm thấy</h4>
+                            <p class="text-sm text-red-600">Vui lòng kiểm tra lại thông tin</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // === Kiểm tra đăng nhập khi tải trang ===
+        window.onload = function() {
+            const saved = localStorage.getItem('p12_user');
+            if (saved) {
+                currentUser = JSON.parse(saved);
+                updateUserUI();
+            }
+            updateOrderHistory();
+        };
+    </script>
+</body>
+</html>
